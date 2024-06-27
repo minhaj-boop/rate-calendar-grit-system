@@ -165,6 +165,15 @@ const Calendar = () => {
           >
             <TableHead>
               <TableRow>
+                <TableCell
+                  key="empty-cell"
+                  sx={{
+                    borderRight: 1,
+                    borderColor: "grey.200",
+                    height: 15,
+                    maxHeight: 15,
+                  }}
+                />
                 {data[0]?.inventory_calendar
                   ?.filter((item) => {
                     const monthYear = dayjs(item.date).format("MMM YYYY");
@@ -174,21 +183,51 @@ const Calendar = () => {
                     uniqueMonths.add(monthYear);
                     return true;
                   })
-                  .map((item) => (
-                    <TableCell
-                      sx={{
-                        borderRight: 1,
-                        borderColor: "grey.200",
-                        height: 15,
-                        maxHeight: 15,
-                      }}
-                    >
-                      {dayjs(item.date).format("MMM YYYY")}
-                    </TableCell>
-                  ))}
+                  .map((item) => {
+                    const monthYear = dayjs(item.date).format("MMM YYYY");
+                    return (
+                      <TableCell
+                        sx={{
+                          borderRight: 1,
+                          borderColor: "grey.200",
+                          height: 15,
+                          maxHeight: 15,
+                        }}
+                      >
+                        {monthYear}
+                        {data[0]?.inventory_calendar
+                          .filter(
+                            (day) =>
+                              dayjs(day.date).format("MMM YYYY") === monthYear
+                          )
+                          .map((day) => (
+                            <TableCell
+                              sx={{
+                                borderRight: 1,
+                                borderColor: "grey.200",
+                                height: 15,
+                                maxHeight: 15,
+                              }}
+                            >
+                              {dayjs(day.date).format("ddd DD")}
+                            </TableCell>
+                          ))}
+                      </TableCell>
+                    );
+                  })}
               </TableRow>
-              <TableRow>
-                <TableCell
+            </TableHead>
+            <TableBody>
+              {data.map((row) => (
+                <TableRow
+                  key={row.id}
+                  // sx={{
+                  //   "&:last-child td, &:last-child th": {
+                  //     border: 0,
+                  //     height: 15,
+                  //     maxHeight: 15,
+                  //   },
+                  // }}
                   sx={{
                     borderRight: 1,
                     borderColor: "grey.200",
@@ -196,56 +235,17 @@ const Calendar = () => {
                     maxHeight: 15,
                   }}
                 >
-                  Dessert (100g serving)
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow
-                  key={row.name}
-                  sx={{
-                    "&:last-child td, &:last-child th": {
-                      border: 0,
-                      height: 15,
-                      maxHeight: 15,
-                    },
-                  }}
-                >
-                  <TableCell
-                    sx={{
-                      borderRight: 1,
-                      borderColor: "grey.200",
-                      height: 15,
-                      maxHeight: 15,
-                    }}
-                    component="th"
-                    scope="row"
-                  >
-                    {row.name}
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderRight: 1,
-                      borderColor: "grey.200",
-                      height: 15,
-                      maxHeight: 15,
-                    }}
-                    align="right"
-                  >
-                    {row.calories}
-                  </TableCell>
-                  <TableCell
-                    sx={{
-                      borderRight: 1,
-                      borderColor: "grey.200",
-                      height: 15,
-                      maxHeight: 15,
-                    }}
-                    align="right"
-                  >
-                    {row.fat}
-                  </TableCell>
+                  {row.name}
+                  {row.rate_plans.map(() => (
+                    <TableRow
+                      sx={{
+                        borderRight: 1,
+                        borderColor: "grey.200",
+                        height: 15,
+                        maxHeight: 15,
+                      }}
+                    ></TableRow>
+                  ))}
                 </TableRow>
               ))}
             </TableBody>
